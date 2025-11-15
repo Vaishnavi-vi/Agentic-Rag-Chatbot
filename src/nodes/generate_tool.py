@@ -23,6 +23,7 @@ def generate_tool_response(state: Agentstate):
             "```{tool_output}```\n\n"
             "Your task:\n"
             "- Interpret this result accurately.\n"
+            "- Do not give any kind of meta data just explain in plain human readable English language\n"
             "- Explain it in plain, human-readable English.\n"
             "- Do **not** show JSON, code, or key-value pairs.\n"
             "- Respond conversationally as if talking to the user.\n"

@@ -10,32 +10,39 @@ class QueryRequest(BaseModel):
     query: str
 
 @app.get("/about")
-def root():
-    return {"response":"Agentic Rag Chatbot with multi tool Integration"}
+def about():
+    return {"response": "Agentic Rag Chatbot with multi tool Integration"}
 
 @app.get("/health")
-def root():
+def health():
     return {"status": "running"}
 
 @app.post("/chat/stream")
 def chat_stream(req: QueryRequest):
-    """Stream token-by-token model output"""
 
     initial_state = {"messages": [HumanMessage(content=req.query)]}
     config = {"configurable": {"thread_id": "1"}}
 
     def generate():
         try:
-            # Stream messages as they come from workflow
             for message_chunk, metadata in workflow.stream(
                 initial_state, config, stream_mode="messages"
             ):
-                if message_chunk.content:
-                    # Send chunk as it arrives
-                    yield message_chunk.content + " "
-        except Exception as e:
-            yield f"\nError: {e}"
+                # Case 1: LangChain message (AIMessage etc.)
+                if hasattr(message_chunk, "content"):
+                    if message_chunk.content:
+                        yield message_chunk.content
 
-    # Stream it as plain text to client
+                # Case 2: plain string
+                else:
+                    yield str(message_chunk)
+
+        except Exception as e:
+            yield f"\nError: {str(e)}"
+
     return StreamingResponse(generate(), media_type="text/plain")
+
+
+
+
 

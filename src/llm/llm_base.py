@@ -1,7 +1,8 @@
 from langchain_huggingface import ChatHuggingFace,HuggingFaceEndpoint # Replace with your LLM
 import os
+from langsmith import traceable
 
-
+@traceable(name="load_llm_model", tags=["llm", "huggingface"])
 def get_llm(api_key: str = None):
     api_key=os.getenv("HUGGINGFACEHUB_API_TOKEN")
     llm_endpoint = HuggingFaceEndpoint(

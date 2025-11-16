@@ -1,12 +1,12 @@
 from src.state import Agentstate
 from langchain_core.messages import AIMessage,ToolMessage,HumanMessage
 from src.llm.llm_with_tools import model_with_tool
-
-
+from langsmith import traceable
 from langchain_core.prompts import PromptTemplate
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
 from langchain_core.output_parsers import StrOutputParser
 
+@traceable(run_type="chain", name="generate_tool_response") 
 def generate_tool_response(state: Agentstate):
     """Use LLM to turn structured tool output into a clean, readable summary."""
     tool_messages = [m for m in state["messages"] if isinstance(m, ToolMessage)]
@@ -17,24 +17,26 @@ def generate_tool_response(state: Agentstate):
 
     # Define your summarization prompt
     prompt = PromptTemplate(
-        input_variables=["tool_output"],
-        template=(
-            "You are a helpful AI assistant. A tool has just returned this structured result:\n"
-            "```{tool_output}```\n\n"
-            "Your task:\n"
-            "- Interpret this result accurately.\n"
-            "- Do not give any kind of meta data just explain in plain human readable English language\n"
-            "- Explain it in plain, human-readable English.\n"
-            "- Do **not** show JSON, code, or key-value pairs.\n"
-            "- Respond conversationally as if talking to the user.\n"
-            "- Keep it short (2–3 sentences max).\n\n"
-            "Now write your response:"
-        ),
-    )
+    input_variables=["tool_output"],
+    template=(
+        "You are a helpful AI assistant. A tool returned the following data:\n"
+        "{tool_output}\n\n"
+        "Convert this into a clean, simple human-readable answer.\n"
+        "\n"
+        "STRICT RULES:\n"
+        "• Do NOT show metadata.\n"
+        "• Do NOT show JSON or key–value pairs.\n"
+        "• Do NOT repeat the raw data.\n"
+        "• Explain the result in natural, conversational English.\n"
+        "• Keep it short **summary** (2–3 sentences).\n"
+        "\n"
+        "Human-friendly answer:"
+    ),
+)
 
     # Combine prompt + model + parser in a simple chain
     parser = StrOutputParser()
     chain = prompt | model_with_tool | parser
 
     response = chain.invoke({"tool_output": latest_tool_output})
-    return {"messages": [response]}
+    return {"messages": [AIMessage(content=response)]}

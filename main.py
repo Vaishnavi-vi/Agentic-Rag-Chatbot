@@ -1,18 +1,16 @@
-# main.py
+from src.workflow.pipeline import workflow
 import os
 from dotenv import load_dotenv
 from langchain_core.messages import HumanMessage
 
-# ---- Load Environment Variables ----
+
 load_dotenv()
 
-# ---- Import your compiled workflow ----
-from src.workflow.pipeline import workflow
 
 # ---- Run the Chatbot ----
 if __name__ == "__main__":
     thread_id = "1"
-    query = input("Enter your query: ")  # e.g. "What is weather in Delhi?"
+    query = input("Enter your query: ")  
     
     # Initial state
     initial_state = {"messages": [HumanMessage(content=query)]}

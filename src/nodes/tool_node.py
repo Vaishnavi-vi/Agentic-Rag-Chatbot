@@ -5,7 +5,7 @@ from langchain_community.tools import DuckDuckGoSearchRun
 
 tools=[calculate_bmi,calculator,get_weather_update,get_conversion_factor,get_stock,web_search,wikipedia_search]
 
-search_tool = DuckDuckGoSearchRun(name="search_tool", description="Get recent updates from the internet")
+
 tools = [
     StructuredTool.from_function(calculator, description="Performs basic arithmetic operations."),
     StructuredTool.from_function(calculate_bmi,description="calculates bmi and tell in which category a person belong to"),

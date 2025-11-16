@@ -1,11 +1,11 @@
 # src/pipeline/tool_binding.py
 from src.tools.run_tool import calculate_bmi,calculator,get_conversion_factor,get_stock,get_weather_update,web_search,wikipedia_search
 from src.llm.llm_base import model
+from langsmith import traceable
 
 
 
-
-
+@traceable(name="load_with_tools", tags=["llm", "huggingface","llm_with_tools"])
 def llm_with_tool():
     """
     Binds the base model with all available tools.

@@ -6,11 +6,12 @@ from langchain_community.tools import DuckDuckGoSearchRun
 from langchain.tools import tool
 from langchain_community.utilities import WikipediaAPIWrapper
 from dotenv import load_dotenv
+from langsmith import traceable
 
 load_dotenv()
 
 #tool Function 
-
+@traceable(name="tool_calculate_bmi")
 def calculate_bmi(height: float, weight: float) -> Tuple[float, str]:
     """Calculate the Body Mass Index (BMI) based on a person's height (in meters) and weight (in kilograms).
     Use this tool when a user asks about BMI, health category, or body weight status."""
@@ -26,7 +27,7 @@ def calculate_bmi(height: float, weight: float) -> Tuple[float, str]:
     return bmi, category
 
 
-
+@traceable(name="tool_weather_update")
 def get_weather_update(symbol: str):
     """ Fetch the current weather information for a specific city using the OpenWeather API.
     Use this tool when a user asks about the weather, temperature, or weather conditions in any location."""
@@ -35,10 +36,11 @@ def get_weather_update(symbol: str):
     try:
         response = requests.get(url)
         return response.json()
+
     except requests.exceptions.RequestException as e:
         return {"error": str(e)}
     
-
+@traceable(name="tool_currency_conversion")
 def get_conversion_factor(base_currency: str, target_currency: str, amount: float) -> float:
     """
     Convert a specific amount from one currency to another using real-time exchange rates.
@@ -46,18 +48,22 @@ def get_conversion_factor(base_currency: str, target_currency: str, amount: floa
     api_key = os.getenv("CURRENCY_CONVERSION_API_KEY")
     url = f"https://api.exchangerate.host/convert?from={base_currency}&to={target_currency}&amount={amount}&access_key={api_key}"
     response = requests.get(url)
-    return response.json()
+    data= response.json()
+    return data 
 
 
+@traceable(name="tool_stock_price")
 def get_stock(symbol: str) -> str:
     """ Retrieve the latest intraday stock price and related information for a given company ticker symbol.
     Use this tool when a user asks for stock prices, share values, or stock market updates. """
     api_key = os.getenv("STOCK_API_KEY")
     url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={symbol}&interval=5min&apikey={api_key}"
     response = requests.get(url)
-    return response.json()
+    data=response.json()
+    return data
+    
 
-
+@traceable(name="tool_calculator")
 def calculator(a: float, b: float, operation: str) -> float:
     """ Perform basic arithmetic operations such as addition, subtraction, multiplication, division, power, and square root.
     Use this tool when a user asks to perform a mathematical calculation."""
@@ -65,30 +71,29 @@ def calculator(a: float, b: float, operation: str) -> float:
         return a + b
     elif operation == "subtract":
         return a - b
-    elif operation == "product":
+    elif operation == "multiply":
         return a * b
     elif operation == "divide":
         return a / b
     elif operation == "power":
         return a**b
-    elif operation == "underroot":
+    elif operation == "squareroot":
         return np.sqrt(a)
     else:
         return None
-    
 
-
+@traceable(name="tool_web_search")
 def web_search(query: str) -> str:
     """Perform a general web search using DuckDuckGo and return the top results.
     """
     try:
-        search = DuckDuckGoSearchRun()
+        search = DuckDuckGoSearchRun(region="us-en")
         result = search.run(query)
         return result
     except Exception as e:
         return f"Error fetching search results: {str(e)}"
 
-
+@traceable(name="tool_wikipedia_search")
 def wikipedia_search(query: str) -> str:
     """Searches Wikipedia for a given topic and returns a short summary.
     

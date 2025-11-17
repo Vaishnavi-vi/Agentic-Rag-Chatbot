@@ -1,0 +1,15 @@
+{"inputs": {"query": "What is the BMI of a person who weighs 75kg and is 1.7m tall?"}, "outputs": {"reference": "25.95"}, "note": "Tool node: BMI calculation"}
+{"inputs": {"query": "Convert 100 USD to INR"}, "outputs": {"reference": "8200"}, "note": "Tool node: currency conversion"}
+{"inputs": {"query": "What is the current stock price of AAPL?"}, "outputs": {"reference": "Approx 170 USD"}, "note": "Tool node: stock lookup"}
+{"inputs": {"query": "Explain what LangGraph is and how it works."}, "outputs": {"reference": "LangGraph is a framework for building knowledge graphs with LLM integration."}, "note": "RAG node: factual retrieval + LLM summary"}
+{"inputs": {"query": "Tell me about vector databases and their use cases."}, "outputs": {"reference": "Vector databases store embeddings for fast similarity search, commonly used in AI applications."}, "note": "RAG node + LLM summary"}
+{"inputs": {"query": "If I weigh 80kg and am 1.8m tall, what is my BMI? Also tell me the healthy range."}, "outputs": {"reference": "BMI is 24.7; healthy range is 18.5–24.9"}, "note": "Multi-node: tool + chat summary"}
+{"inputs": {"query": "What is the weather in Paris today?"}, "outputs": {"reference": "Approx 18°C, partly cloudy"}, "note": "Tool node: weather update"}
+{"inputs": {"query": "What is the capital of France?"}, "outputs": {"reference": "Paris"}, "note": "RAG node: factual retrieval"}
+{"inputs": {"query": "Calculate the sum of 123 and 456"}, "outputs": {"reference": "579"}, "note": "Tool node: basic calculator"}
+{"inputs": {"query": "What was the stock price of TSLA on Jan 1, 2023?"}, "outputs": {"reference": "Approx 1080 USD"}, "note": "Tool node: historical stock lookup"}
+{"inputs": {"query": "Explain the difference between supervised and unsupervised learning."}, "outputs": {"reference": "Supervised learning uses labeled data, unsupervised learning finds patterns in unlabeled data."}, "note": "RAG node: conceptual explanation"}
+{"inputs": {"query": "What's the temperature in New York now and a 3-day forecast?"}, "outputs": {"reference": "Approx 22°C today, 3-day forecast: 23°C, 21°C, 20°C"}, "note": "Tool node: weather + forecast"}
+{"inputs": {"query": "What is the capital of Germany?"}, "outputs": {"reference": "Berlin"}, "note": "RAG node: factual retrieval"}
+{"inputs": {"query": "What is the capital of Italy?"}, "outputs": {"reference": "Rome"}, "note": "RAG node: factual retrieval"}
+{"inputs": {"query": "Who wrote 'Pride and Prejudice'?"}, "outputs": {"reference": "Jane Austen"}, "note": "RAG node: historical information"}

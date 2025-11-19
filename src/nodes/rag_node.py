@@ -6,8 +6,10 @@ from src.state import Agentstate
 
 @traceable(name="rag_node", tags=["rag", "node"])
 def rag_node(state: Agentstate):
-
-    query = state["messages"][-1].content.strip()
+    
+    messages = state["messages"]
+    user_messages = [m for m in messages if m.type == "human"]
+    query = user_messages[-1].content.strip() if user_messages else ""
 
     google_api_key = os.getenv("GOOGLE_API_KEY")
     cse_id = os.getenv("GOOGLE_CSE_ID")

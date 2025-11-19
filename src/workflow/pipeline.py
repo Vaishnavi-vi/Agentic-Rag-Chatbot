@@ -26,7 +26,7 @@ def check_condition(state: Agentstate):
 
     rag_keywords = [
         "explain", "describe", "define", "tell me about", 
-        "information", "details on", "who is", "why does"
+        "information", "details on", "who is", "why does","history",
     ]
     tool_keywords = [
         "bmi", "body mass", "calculate", "compute", "math", "sum", "add", "subtract",
@@ -67,7 +67,7 @@ graph.add_edge("rag_node", "generate_rag")
 graph.add_edge("tool_node", "generate_tool")
 graph.add_edge("generate_rag", END)
 graph.add_edge("generate_tool", END)
-graph.add_edge("chat_model", END)
+graph.add_edge("chat_model",END)
 
 
 workflow=graph.compile(checkpointer=checkpointer)

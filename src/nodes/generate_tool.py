@@ -15,7 +15,6 @@ def generate_tool_response(state: Agentstate):
 
     latest_tool_output = tool_messages[-1].content
 
-    # Define your summarization prompt
     prompt = PromptTemplate(
     input_variables=["tool_output"],
     template=(
@@ -39,4 +38,7 @@ def generate_tool_response(state: Agentstate):
     chain = prompt | model_with_tool | parser
 
     response = chain.invoke({"tool_output": latest_tool_output})
-    return {"messages": [AIMessage(content=response)]}
+    state["messages"].append(AIMessage(content=response.strip()))
+
+    return {"messages": state["messages"]}
+    # return {"messages": [AIMessage(content=response)],"replace_messages":True}

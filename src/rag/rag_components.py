@@ -50,7 +50,7 @@ def embed_and_store(chunks):
 @traceable(name="retrieve_docs", tags=["rag", "retriever"])
 def retrieve_docs(vectorstore, query: str, k: int = 3):
     retriever = vectorstore.as_retriever(
-        search_kwargs={"k": k},
+        search_kwargs={"k":k},
         search_type="similarity"
     )
     return retriever.invoke(query)
@@ -58,4 +58,14 @@ def retrieve_docs(vectorstore, query: str, k: int = 3):
 
 @traceable(name="format_docs", tags=["rag"])
 def format_docs(docs):
-    return "\n".join(doc.page_content for doc in docs)
+    seen = set()
+    unique_contents = []
+
+    for d in docs:
+        text = d.page_content.strip()
+        if text not in seen:
+            unique_contents.append(text)
+            seen.add(text)
+
+    return "\n\n".join(unique_contents)
+

@@ -7,5 +7,5 @@ from langsmith import traceable
 def chat_model(state: Agentstate):
     messages = state["messages"]
     response = model_with_tool.invoke(messages)
-    return {"messages": messages + [response]}
+    return {"messages": [response]}
 

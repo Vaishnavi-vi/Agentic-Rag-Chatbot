@@ -123,6 +123,7 @@ elif page == "Agentic Rag Chatbot":
 
         st.session_state["message_history"].append(
             {"role": "assistant", "content": collected_text})
+    
 
 
 
